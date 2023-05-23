@@ -8,6 +8,10 @@
         <hr>
         <br>
         <p>{{$project->description}}</p>
+        <br>
+        <hr>
+        <br>
+        <p>{{$project->type ? $project->type->title : '-' }}</p>
         <hr>
         <a href="{{$project->link}}">Scarica progetto</a><br>
         <a href="{{route('admin.projects.index')}}">Torna alla lista dei progetti</a>

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 
 use App\Models\Project;
+use App\Models\Type;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\support\Facades\Validator;
@@ -20,7 +21,7 @@ class ProjectController extends Controller
     {
         $projects = Project::all();
 
-        return view('admin.projects.index', compact(['projects']));
+        return view('admin.projects.index', compact('projects'));
     }
 
     /**
@@ -30,7 +31,8 @@ class ProjectController extends Controller
      */
     public function create()
     {
-        return view('admin.projects.create');
+        $types = Type::all();
+        return view('admin.projects.create', compact('types'));
     }
 
     /**
@@ -41,7 +43,8 @@ class ProjectController extends Controller
      *
      */
     public function store(Request $request)
-    {
+    {   
+        
         $this->validation($request);
 
         $formData = $request->all();
@@ -50,6 +53,7 @@ class ProjectController extends Controller
         $newProject->description = $formData['description'];
         $newProject->slug = Str::slug($newProject->title, '-');
         $newProject->link = $formData['link'];
+        $newProject->type_id = $formData['type_id'];
 
         $newProject->save();
         return redirect()->route('admin.projects.show', $newProject->slug);
@@ -74,7 +78,8 @@ class ProjectController extends Controller
      */
     public function edit(Project $project)
     {
-        return view('admin.projects.edit', compact('project'));
+        $types = Type::all();
+        return view('admin.projects.edit', compact('project', 'types'));
     }
 
     /**
