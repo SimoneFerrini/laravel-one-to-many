@@ -70,7 +70,7 @@ class TypeController extends Controller
      */
     public function edit(Type $type)
     {
-        //
+        return view('admin.types.edit', compact('type'));
     }
 
     /**
@@ -82,7 +82,14 @@ class TypeController extends Controller
      */
     public function update(Request $request, Type $type)
     {
-        //
+        $this->validation($request);
+
+        $formData =$request->all();
+        $type->update($formData);
+
+        $type->save();
+
+        return redirect()->route('admin.types.show', $type->slug);
     }
 
     /**
@@ -93,6 +100,14 @@ class TypeController extends Controller
      */
     public function destroy(Type $type)
     {
-        //
+        $type->delete();
+        return redirect()->route('admin.types.index');
+    }
+
+    private function validation($request){
+        $request->validate([
+            'title' => 'required|min:5',
+            'description'=> 'required',
+        ]);
     }
 }
