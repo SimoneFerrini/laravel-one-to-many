@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Type;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class TypeController extends Controller
 {
@@ -15,7 +16,8 @@ class TypeController extends Controller
      */
     public function index()
     {
-        //
+        $types = Type::all();
+        return view('admin.types.index', compact('types'));
     }
 
     /**
@@ -25,7 +27,7 @@ class TypeController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.types.create');
     }
 
     /**
@@ -36,7 +38,17 @@ class TypeController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->validation($request);
+
+        $formData = $request->all();
+        $newType = new Type();
+        $newType->title = $formData['title'];
+        $newType->description = $formData['description'];
+        $newType->slug = Str::slug($newType->title, '-');
+        
+
+        $newType->save();
+        return redirect()->route('admin.types.show', $newType->slug);
     }
 
     /**
@@ -47,7 +59,7 @@ class TypeController extends Controller
      */
     public function show(Type $type)
     {
-        //
+        return view('admin.types.show', compact(['type']));
     }
 
     /**
