@@ -18,10 +18,12 @@ class TypeSeeder extends Seeder
      */
     public function run(Faker $faker)
     {
-        for($i=0; $i<4; $i++){
+        $categories =['Back-End', 'Front-End', 'Fullstack'];
+
+        foreach($categories as $category){
             $type = new Type();
 
-            $type->title = $faker->sentence(3);
+            $type->title = $category;
             $type->description = $faker->text(350);
             $type->slug = Str::slug($type->title, '-');
 
